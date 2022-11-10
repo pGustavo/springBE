@@ -1,10 +1,10 @@
-package com.app.sorteios;
+package com.app.sorteios.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class SorteiosApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
