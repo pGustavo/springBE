@@ -2,21 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.app.sorteios.api.model;
+package com.mycompany.appteste;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
  * @author paulocamargo
  */
 @Entity
-@Table(catalog = "sorteios_db", schema = "")
+@Table(name = "Person", catalog = "sorteios_db", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
     @NamedQuery(name = "Person.findByPersonCode", query = "SELECT p FROM Person p WHERE p.personPK.personCode = :personCode"),
@@ -41,46 +41,51 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Person.findByClubclubcode", query = "SELECT p FROM Person p WHERE p.personPK.clubclubcode = :clubclubcode"),
     @NamedQuery(name = "Person.findByAthleteathletecode", query = "SELECT p FROM Person p WHERE p.personPK.athleteathletecode = :athleteathletecode"),
     @NamedQuery(name = "Person.findByRefereerefereecode", query = "SELECT p FROM Person p WHERE p.personPK.refereerefereecode = :refereerefereecode"),
-    @NamedQuery(name = "Person.findByCoachcoachcode", query = "SELECT p FROM Person p WHERE p.personPK.coachcoachcode = :coachcoachcode")})
+    @NamedQuery(name = "Person.findByCoachcoachcode", query = "SELECT p FROM Person p WHERE p.personPK.coachcoachcode = :coachcoachcode"),
+    @NamedQuery(name = "Person.findByCombatCombateCode", query = "SELECT p FROM Person p WHERE p.personPK.combatCombateCode = :combatCombateCode")})
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected PersonPK personPK;
-
     @Column(name = "first_name")
     private String firstName;
-
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
-
+    @Column(name = "gender")
     private String gender;
-
+    @Column(name = "nationality")
     private String nationality;
-
+    @Column(name = "login")
     private String login;
-
+    @Column(name = "password")
     private String password;
-    
+    @Column(name = "email")
     private String email;
     @Lob
+    @Column(name = "photo")
     private byte[] photo;
-    @ManyToMany(mappedBy = "personCollection", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    private Collection<Poomsae> poomsaeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private Collection<Championship> championshipCollection;
     @JoinColumn(name = "Athlete_athlete_code", referencedColumnName = "athlete_code", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Athlete athlete;
     @JoinColumn(name = "Club_club_code", referencedColumnName = "club_code", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Club club;
     @JoinColumn(name = "Coach_coach_code", referencedColumnName = "coach_code", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Coach coach;
+    @JoinColumn(name = "combat_combate_code", referencedColumnName = "combate_code", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Combat combat;
     @JoinColumn(name = "Referee_referee_code", referencedColumnName = "referee_code", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Referee referee;
 
     public Person() {
@@ -90,8 +95,8 @@ public class Person implements Serializable {
         this.personPK = personPK;
     }
 
-    public Person(int personCode, int clubclubcode, int athleteathletecode, int refereerefereecode, int coachcoachcode) {
-        this.personPK = new PersonPK(personCode, clubclubcode, athleteathletecode, refereerefereecode, coachcoachcode);
+    public Person(int personCode, int clubclubcode, int athleteathletecode, int refereerefereecode, int coachcoachcode, int combatCombateCode) {
+        this.personPK = new PersonPK(personCode, clubclubcode, athleteathletecode, refereerefereecode, coachcoachcode, combatCombateCode);
     }
 
     public PersonPK getPersonPK() {
@@ -174,6 +179,14 @@ public class Person implements Serializable {
         this.photo = photo;
     }
 
+    public Collection<Poomsae> getPoomsaeCollection() {
+        return poomsaeCollection;
+    }
+
+    public void setPoomsaeCollection(Collection<Poomsae> poomsaeCollection) {
+        this.poomsaeCollection = poomsaeCollection;
+    }
+
     public Collection<Championship> getChampionshipCollection() {
         return championshipCollection;
     }
@@ -206,6 +219,14 @@ public class Person implements Serializable {
         this.coach = coach;
     }
 
+    public Combat getCombat() {
+        return combat;
+    }
+
+    public void setCombat(Combat combat) {
+        this.combat = combat;
+    }
+
     public Referee getReferee() {
         return referee;
     }
@@ -235,8 +256,8 @@ public class Person implements Serializable {
     }
 
     @Override
-    public String toString() { 
-        return "com.mycompany.mavenproject1.Person[ personPK=" + personPK + " ]";
+    public String toString() {
+        return "com.mycompany.appteste.Person[ personPK=" + personPK + " ]";
     }
     
 }

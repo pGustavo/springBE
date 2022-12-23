@@ -1,19 +1,18 @@
-package com.app.sorteios.api.model;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.appteste;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,49 +24,59 @@ import javax.persistence.TemporalType;
  * @author paulocamargo
  */
 @Entity
-@Table(catalog = "sorteios_db", schema = "")
+@Table(name = "Championship", catalog = "sorteios_db", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Championship.findAll", query = "SELECT c FROM Championship c"),
-    @NamedQuery(name = "Championship.findByChampCode", query = "SELECT c FROM Championship c WHERE c.champCode = :champCode"),
+    @NamedQuery(name = "Championship.findByChampCode", query = "SELECT c FROM Championship c WHERE c.championshipPK.champCode = :champCode"),
     @NamedQuery(name = "Championship.findByName", query = "SELECT c FROM Championship c WHERE c.name = :name"),
     @NamedQuery(name = "Championship.findByLocation", query = "SELECT c FROM Championship c WHERE c.location = :location"),
-    @NamedQuery(name = "Championship.findByTime", query = "SELECT c FROM Championship c WHERE c.time = :time")})
+    @NamedQuery(name = "Championship.findByTime", query = "SELECT c FROM Championship c WHERE c.time = :time"),
+    @NamedQuery(name = "Championship.findByPersonpersoncode", query = "SELECT c FROM Championship c WHERE c.championshipPK.personpersoncode = :personpersoncode"),
+    @NamedQuery(name = "Championship.findByPersonClubclubcode", query = "SELECT c FROM Championship c WHERE c.championshipPK.personClubclubcode = :personClubclubcode"),
+    @NamedQuery(name = "Championship.findByPersonAthleteathletecode", query = "SELECT c FROM Championship c WHERE c.championshipPK.personAthleteathletecode = :personAthleteathletecode"),
+    @NamedQuery(name = "Championship.findByPersonRefereerefereecode", query = "SELECT c FROM Championship c WHERE c.championshipPK.personRefereerefereecode = :personRefereerefereecode"),
+    @NamedQuery(name = "Championship.findByPersonCoachcoachcode", query = "SELECT c FROM Championship c WHERE c.championshipPK.personCoachcoachcode = :personCoachcoachcode")})
 public class Championship implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "champ_code")
-    private Integer champCode;
-
+    @EmbeddedId
+    protected ChampionshipPK championshipPK;
+    @Column(name = "name")
     private String name;
-
+    @Column(name = "location")
     private String location;
+    @Column(name = "time")
     @Temporal(TemporalType.DATE)
     private Date time;
     @Lob
+    @Column(name = "logo")
     private byte[] logo;
-    @JoinTable(name = "Person_has_Championship", joinColumns = {
-        @JoinColumn(name = "Championship_champ_code", referencedColumnName = "champ_code")}, inverseJoinColumns = {
-        @JoinColumn(name = "Person_person_code", referencedColumnName = "person_code"),
-        @JoinColumn(name = "Person_Club_club_code", referencedColumnName = "Club_club_code")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Person> personCollection;
+    @JoinColumns({
+        @JoinColumn(name = "Person_person_code", referencedColumnName = "person_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Person_Club_club_code", referencedColumnName = "Club_club_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Person_Athlete_athlete_code", referencedColumnName = "Athlete_athlete_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Person_Referee_referee_code", referencedColumnName = "Referee_referee_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Person_Coach_coach_code", referencedColumnName = "Coach_coach_code", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
+    private Person person;
 
     public Championship() {
     }
 
-    public Championship(Integer champCode) {
-        this.champCode = champCode;
+    public Championship(ChampionshipPK championshipPK) {
+        this.championshipPK = championshipPK;
     }
 
-    public Integer getChampCode() {
-        return champCode;
+    public Championship(int champCode, int personpersoncode, int personClubclubcode, int personAthleteathletecode, int personRefereerefereecode, int personCoachcoachcode) {
+        this.championshipPK = new ChampionshipPK(champCode, personpersoncode, personClubclubcode, personAthleteathletecode, personRefereerefereecode, personCoachcoachcode);
     }
 
-    public void setChampCode(Integer champCode) {
-        this.champCode = champCode;
+    public ChampionshipPK getChampionshipPK() {
+        return championshipPK;
+    }
+
+    public void setChampionshipPK(ChampionshipPK championshipPK) {
+        this.championshipPK = championshipPK;
     }
 
     public String getName() {
@@ -102,18 +111,18 @@ public class Championship implements Serializable {
         this.logo = logo;
     }
 
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (champCode != null ? champCode.hashCode() : 0);
+        hash += (championshipPK != null ? championshipPK.hashCode() : 0);
         return hash;
     }
 
@@ -124,7 +133,7 @@ public class Championship implements Serializable {
             return false;
         }
         Championship other = (Championship) object;
-        if ((this.champCode == null && other.champCode != null) || (this.champCode != null && !this.champCode.equals(other.champCode))) {
+        if ((this.championshipPK == null && other.championshipPK != null) || (this.championshipPK != null && !this.championshipPK.equals(other.championshipPK))) {
             return false;
         }
         return true;
@@ -132,7 +141,7 @@ public class Championship implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Championship[ champCode=" + champCode + " ]";
+        return "com.mycompany.appteste.Championship[ championshipPK=" + championshipPK + " ]";
     }
     
 }

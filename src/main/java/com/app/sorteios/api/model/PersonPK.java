@@ -1,10 +1,13 @@
-package com.app.sorteios.api.model;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.appteste;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
 
 /**
  *
@@ -13,39 +16,35 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class PersonPK implements Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Basic(optional = false)
+    @Basic(optional = false)
     @Column(name = "person_code")
     private int personCode;
     @Basic(optional = false)
-
     @Column(name = "Club_club_code")
     private int clubclubcode;
     @Basic(optional = false)
-
     @Column(name = "Athlete_athlete_code")
     private int athleteathletecode;
     @Basic(optional = false)
-
     @Column(name = "Referee_referee_code")
     private int refereerefereecode;
     @Basic(optional = false)
-
     @Column(name = "Coach_coach_code")
     private int coachcoachcode;
+    @Basic(optional = false)
+    @Column(name = "combat_combate_code")
+    private int combatCombateCode;
 
     public PersonPK() {
     }
 
-    public PersonPK(int personCode, int clubclubcode, int athleteathletecode, int refereerefereecode, int coachcoachcode) {
+    public PersonPK(int personCode, int clubclubcode, int athleteathletecode, int refereerefereecode, int coachcoachcode, int combatCombateCode) {
         this.personCode = personCode;
         this.clubclubcode = clubclubcode;
         this.athleteathletecode = athleteathletecode;
         this.refereerefereecode = refereerefereecode;
         this.coachcoachcode = coachcoachcode;
+        this.combatCombateCode = combatCombateCode;
     }
 
     public int getPersonCode() {
@@ -88,6 +87,14 @@ public class PersonPK implements Serializable {
         this.coachcoachcode = coachcoachcode;
     }
 
+    public int getCombatCombateCode() {
+        return combatCombateCode;
+    }
+
+    public void setCombatCombateCode(int combatCombateCode) {
+        this.combatCombateCode = combatCombateCode;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -96,6 +103,7 @@ public class PersonPK implements Serializable {
         hash += (int) athleteathletecode;
         hash += (int) refereerefereecode;
         hash += (int) coachcoachcode;
+        hash += (int) combatCombateCode;
         return hash;
     }
 
@@ -121,12 +129,15 @@ public class PersonPK implements Serializable {
         if (this.coachcoachcode != other.coachcoachcode) {
             return false;
         }
+        if (this.combatCombateCode != other.combatCombateCode) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.PersonPK[ personCode=" + personCode + ", clubclubcode=" + clubclubcode + ", athleteathletecode=" + athleteathletecode + ", refereerefereecode=" + refereerefereecode + ", coachcoachcode=" + coachcoachcode + " ]";
+        return "com.mycompany.appteste.PersonPK[ personCode=" + personCode + ", clubclubcode=" + clubclubcode + ", athleteathletecode=" + athleteathletecode + ", refereerefereecode=" + refereerefereecode + ", coachcoachcode=" + coachcoachcode + ", combatCombateCode=" + combatCombateCode + " ]";
     }
     
 }

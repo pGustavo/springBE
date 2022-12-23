@@ -1,74 +1,87 @@
-package com.app.sorteios.api.model;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.appteste;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 /**
  *
  * @author paulocamargo
  */
 @Entity
-@Table(catalog = "sorteios_db", schema = "")
+@Table(name = "Referee", catalog = "sorteios_db", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Referee.findAll", query = "SELECT r FROM Referee r"),
-    @NamedQuery(name = "Referee.findByRefereeCode", query = "SELECT r FROM Referee r WHERE r.refereeCode = :refereeCode"),
+    @NamedQuery(name = "Referee.findByRefereeCode", query = "SELECT r FROM Referee r WHERE r.refereePK.refereeCode = :refereeCode"),
     @NamedQuery(name = "Referee.findByLastRecycle", query = "SELECT r FROM Referee r WHERE r.lastRecycle = :lastRecycle"),
     @NamedQuery(name = "Referee.findByType", query = "SELECT r FROM Referee r WHERE r.type = :type"),
-    @NamedQuery(name = "Referee.findByInternational", query = "SELECT r FROM Referee r WHERE r.international = :international")})
+    @NamedQuery(name = "Referee.findByInternational", query = "SELECT r FROM Referee r WHERE r.international = :international"),
+    @NamedQuery(name = "Referee.findByPoomsaepoomsaecode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaepoomsaecode = :poomsaepoomsaecode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersonpersoncode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersonpersoncode = :poomsaePersonpersoncode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersonClubclubcode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersonClubclubcode = :poomsaePersonClubclubcode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersonAthleteathletecode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersonAthleteathletecode = :poomsaePersonAthleteathletecode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersonRefereerefereecode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersonRefereerefereecode = :poomsaePersonRefereerefereecode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersonCoachcoachcode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersonCoachcoachcode = :poomsaePersonCoachcoachcode"),
+    @NamedQuery(name = "Referee.findByPoomsaePersoncombatcombatecode", query = "SELECT r FROM Referee r WHERE r.refereePK.poomsaePersoncombatcombatecode = :poomsaePersoncombatcombatecode")})
 public class Referee implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "referee_code")
-    private Integer refereeCode;
-
+    @EmbeddedId
+    protected RefereePK refereePK;
     @Column(name = "last_recycle")
     private String lastRecycle;
-
+    @Column(name = "type")
     private String type;
+    @Column(name = "international")
     private Short international;
     @Lob
+    @Column(name = "proof")
     private byte[] proof;
-    @JoinTable(name = "Referee_has_combat", joinColumns = {
-        @JoinColumn(name = "Referee_referee_code", referencedColumnName = "referee_code")}, inverseJoinColumns = {
-        @JoinColumn(name = "combat_combate_code", referencedColumnName = "combate_code")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Combat> combatCollection;
-    @ManyToMany(mappedBy = "refereeCollection", fetch = FetchType.EAGER)
-    private Collection<Poomsae> poomsaeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee", fetch = FetchType.EAGER)
+    @JoinColumns({
+        @JoinColumn(name = "Poomsae_poomsae_code", referencedColumnName = "poomsae_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_person_code", referencedColumnName = "Person_person_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_Club_club_code", referencedColumnName = "Person_Club_club_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_Athlete_athlete_code", referencedColumnName = "Person_Athlete_athlete_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_Referee_referee_code", referencedColumnName = "Person_Referee_referee_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_Coach_coach_code", referencedColumnName = "Person_Coach_coach_code", insertable = false, updatable = false),
+        @JoinColumn(name = "Poomsae_Person_combat_combate_code", referencedColumnName = "Person_combat_combate_code", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
+    private Poomsae poomsae;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
     private Collection<Person> personCollection;
 
     public Referee() {
     }
 
-    public Referee(Integer refereeCode) {
-        this.refereeCode = refereeCode;
+    public Referee(RefereePK refereePK) {
+        this.refereePK = refereePK;
     }
 
-    public Integer getRefereeCode() {
-        return refereeCode;
+    public Referee(int refereeCode, int poomsaepoomsaecode, int poomsaePersonpersoncode, int poomsaePersonClubclubcode, int poomsaePersonAthleteathletecode, int poomsaePersonRefereerefereecode, int poomsaePersonCoachcoachcode, int poomsaePersoncombatcombatecode) {
+        this.refereePK = new RefereePK(refereeCode, poomsaepoomsaecode, poomsaePersonpersoncode, poomsaePersonClubclubcode, poomsaePersonAthleteathletecode, poomsaePersonRefereerefereecode, poomsaePersonCoachcoachcode, poomsaePersoncombatcombatecode);
     }
 
-    public void setRefereeCode(Integer refereeCode) {
-        this.refereeCode = refereeCode;
+    public RefereePK getRefereePK() {
+        return refereePK;
+    }
+
+    public void setRefereePK(RefereePK refereePK) {
+        this.refereePK = refereePK;
     }
 
     public String getLastRecycle() {
@@ -103,20 +116,12 @@ public class Referee implements Serializable {
         this.proof = proof;
     }
 
-    public Collection<Combat> getCombatCollection() {
-        return combatCollection;
+    public Poomsae getPoomsae() {
+        return poomsae;
     }
 
-    public void setCombatCollection(Collection<Combat> combatCollection) {
-        this.combatCollection = combatCollection;
-    }
-
-    public Collection<Poomsae> getPoomsaeCollection() {
-        return poomsaeCollection;
-    }
-
-    public void setPoomsaeCollection(Collection<Poomsae> poomsaeCollection) {
-        this.poomsaeCollection = poomsaeCollection;
+    public void setPoomsae(Poomsae poomsae) {
+        this.poomsae = poomsae;
     }
 
     public Collection<Person> getPersonCollection() {
@@ -130,7 +135,7 @@ public class Referee implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (refereeCode != null ? refereeCode.hashCode() : 0);
+        hash += (refereePK != null ? refereePK.hashCode() : 0);
         return hash;
     }
 
@@ -141,7 +146,7 @@ public class Referee implements Serializable {
             return false;
         }
         Referee other = (Referee) object;
-        if ((this.refereeCode == null && other.refereeCode != null) || (this.refereeCode != null && !this.refereeCode.equals(other.refereeCode))) {
+        if ((this.refereePK == null && other.refereePK != null) || (this.refereePK != null && !this.refereePK.equals(other.refereePK))) {
             return false;
         }
         return true;
@@ -149,7 +154,7 @@ public class Referee implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Referee[ refereeCode=" + refereeCode + " ]";
+        return "com.mycompany.appteste.Referee[ refereePK=" + refereePK + " ]";
     }
     
 }

@@ -1,4 +1,8 @@
-package com.app.sorteios.api.model;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.appteste;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -6,7 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +23,7 @@ import javax.persistence.Table;
  * @author paulocamargo
  */
 @Entity
-@Table(catalog = "sorteios_db", schema = "")
+@Table(name = "Club", catalog = "sorteios_db", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Club.findAll", query = "SELECT c FROM Club c"),
     @NamedQuery(name = "Club.findByClubCode", query = "SELECT c FROM Club c WHERE c.clubCode = :clubCode"),
@@ -34,13 +37,11 @@ public class Club implements Serializable {
     @Basic(optional = false)
     @Column(name = "club_code")
     private Integer clubCode;
-
     @Column(name = "email_address")
     private String emailAddress;
-
     @Column(name = "club_name")
     private String clubName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "club", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "club")
     private Collection<Person> personCollection;
 
     public Club() {
@@ -104,7 +105,7 @@ public class Club implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Club[ clubCode=" + clubCode + " ]";
+        return "com.mycompany.appteste.Club[ clubCode=" + clubCode + " ]";
     }
     
 }

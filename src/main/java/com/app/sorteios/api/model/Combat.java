@@ -1,18 +1,22 @@
-package com.app.sorteios.api.model;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.appteste;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,11 +26,11 @@ import javax.persistence.TemporalType;
  * @author paulocamargo
  */
 @Entity
-@Table(catalog = "sorteios_db", schema = "")
+@Table(name = "combat", catalog = "sorteios_db", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Combat.findAll", query = "SELECT c FROM Combat c"),
     @NamedQuery(name = "Combat.findByCombateCode", query = "SELECT c FROM Combat c WHERE c.combateCode = :combateCode"),
-    @NamedQuery(name = "Combat.findByMath", query = "SELECT c FROM Combat c WHERE c.math = :math"),
+    @NamedQuery(name = "Combat.findByRoundOf", query = "SELECT c FROM Combat c WHERE c.roundOf = :roundOf"),
     @NamedQuery(name = "Combat.findByCombatDate", query = "SELECT c FROM Combat c WHERE c.combatDate = :combatDate"),
     @NamedQuery(name = "Combat.findByWinner", query = "SELECT c FROM Combat c WHERE c.winner = :winner"),
     @NamedQuery(name = "Combat.findByScore", query = "SELECT c FROM Combat c WHERE c.score = :score")})
@@ -38,18 +42,17 @@ public class Combat implements Serializable {
     @Basic(optional = false)
     @Column(name = "combate_code")
     private Integer combateCode;
-    private Integer math;
+    @Column(name = "roundOf")
+    private Integer roundOf;
     @Column(name = "combat_date")
     @Temporal(TemporalType.DATE)
     private Date combatDate;
-
+    @Column(name = "winner")
     private String winner;
- 
+    @Column(name = "score")
     private String score;
-    @ManyToMany(mappedBy = "combatCollection", fetch = FetchType.EAGER)
-    private Collection<Referee> refereeCollection;
-    @ManyToMany(mappedBy = "combatCollection", fetch = FetchType.EAGER)
-    private Collection<Athlete> athleteCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "combat")
+    private Collection<Person> personCollection;
 
     public Combat() {
     }
@@ -66,12 +69,12 @@ public class Combat implements Serializable {
         this.combateCode = combateCode;
     }
 
-    public Integer getMath() {
-        return math;
+    public Integer getRoundOf() {
+        return roundOf;
     }
 
-    public void setMath(Integer math) {
-        this.math = math;
+    public void setRoundOf(Integer roundOf) {
+        this.roundOf = roundOf;
     }
 
     public Date getCombatDate() {
@@ -98,20 +101,12 @@ public class Combat implements Serializable {
         this.score = score;
     }
 
-    public Collection<Referee> getRefereeCollection() {
-        return refereeCollection;
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
     }
 
-    public void setRefereeCollection(Collection<Referee> refereeCollection) {
-        this.refereeCollection = refereeCollection;
-    }
-
-    public Collection<Athlete> getAthleteCollection() {
-        return athleteCollection;
-    }
-
-    public void setAthleteCollection(Collection<Athlete> athleteCollection) {
-        this.athleteCollection = athleteCollection;
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @Override
@@ -136,7 +131,7 @@ public class Combat implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Combat[ combateCode=" + combateCode + " ]";
+        return "com.mycompany.appteste.Combat[ combateCode=" + combateCode + " ]";
     }
     
 }
