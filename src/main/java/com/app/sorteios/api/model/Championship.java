@@ -6,18 +6,19 @@ package com.app.sorteios.api.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.mapping.Set;
 
 /**
  *
@@ -51,14 +52,12 @@ public class Championship implements Serializable {
     @Lob
     @Column(name = "logo")
     private byte[] logo;
-    @JoinColumns({
-        @JoinColumn(name = "Person_person_code", referencedColumnName = "person_code", insertable = false, updatable = false),
-        @JoinColumn(name = "Person_Club_club_code", referencedColumnName = "Club_club_code", insertable = false, updatable = false),
-        @JoinColumn(name = "Person_Athlete_athlete_code", referencedColumnName = "Athlete_athlete_code", insertable = false, updatable = false),
-        @JoinColumn(name = "Person_Referee_referee_code", referencedColumnName = "Referee_referee_code", insertable = false, updatable = false),
-        @JoinColumn(name = "Person_Coach_coach_code", referencedColumnName = "Coach_coach_code", insertable = false, updatable = false)})
-    @ManyToOne(optional = false)
-    private Person person;
+   
+
+    @JoinColumn(name = "Person_person_code", referencedColumnName = "person_code", insertable = false, updatable = false)
+    private Set personCollection;
+    
+   
 
     public Championship() {
     }
@@ -111,15 +110,10 @@ public class Championship implements Serializable {
         this.logo = logo;
     }
 
-    public Person getPerson() {
-        return person;
-    }
 
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 
-    @Override
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (championshipPK != null ? championshipPK.hashCode() : 0);

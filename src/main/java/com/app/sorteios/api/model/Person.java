@@ -7,6 +7,7 @@ package com.app.sorteios.api.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -20,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.mapping.Set;
 
 /**
  *
@@ -70,23 +73,28 @@ public class Person implements Serializable {
     private byte[] photo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private Collection<Poomsae> poomsaeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-    private Collection<Championship> championshipCollection;
+    
+    
     @JoinColumn(name = "Athlete_athlete_code", referencedColumnName = "athlete_code", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Athlete athlete;
+    
     @JoinColumn(name = "Club_club_code", referencedColumnName = "club_code", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Club club;
+    
     @JoinColumn(name = "Coach_coach_code", referencedColumnName = "coach_code", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Coach coach;
+    
     @JoinColumn(name = "combat_combate_code", referencedColumnName = "combate_code", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Combat combat;
+    
+    
     @JoinColumn(name = "Referee_referee_code", referencedColumnName = "referee_code", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Referee referee;
+    private Set refereeCollection;
+    
 
     public Person() {
     }
@@ -187,13 +195,6 @@ public class Person implements Serializable {
         this.poomsaeCollection = poomsaeCollection;
     }
 
-    public Collection<Championship> getChampionshipCollection() {
-        return championshipCollection;
-    }
-
-    public void setChampionshipCollection(Collection<Championship> championshipCollection) {
-        this.championshipCollection = championshipCollection;
-    }
 
     public Athlete getAthlete() {
         return athlete;
@@ -227,13 +228,6 @@ public class Person implements Serializable {
         this.combat = combat;
     }
 
-    public Referee getReferee() {
-        return referee;
-    }
-
-    public void setReferee(Referee referee) {
-        this.referee = referee;
-    }
 
     @Override
     public int hashCode() {

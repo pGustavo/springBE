@@ -69,6 +69,7 @@ public class Poomsae implements Serializable {
         @JoinColumn(name = "Person_combat_combate_code", referencedColumnName = "combat_combate_code", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Person person;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poomsae")
     private Collection<Referee> refereeCollection;
 

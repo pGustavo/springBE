@@ -5,8 +5,7 @@
 package com.app.sorteios.api.model;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,8 +15,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.mapping.Set;
 
 /**
  *
@@ -62,8 +62,10 @@ public class Referee implements Serializable {
         @JoinColumn(name = "Poomsae_Person_combat_combate_code", referencedColumnName = "Person_combat_combate_code", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Poomsae poomsae;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
-    private Collection<Person> personCollection;
+    
+    
+    @JoinColumn(name = "Person_person_code", referencedColumnName = "person_code", insertable = false, updatable = false)
+    private Set personCollection;
 
     public Referee() {
     }
@@ -124,13 +126,7 @@ public class Referee implements Serializable {
         this.poomsae = poomsae;
     }
 
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
-    }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
-    }
 
     @Override
     public int hashCode() {
