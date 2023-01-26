@@ -23,7 +23,7 @@ import com.app.sorteios.api.repository.AthleteRepository;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("athlete/api/v1/")
+@RequestMapping("/api/v1/")
 public class AthleteController {
 	
 
@@ -31,12 +31,12 @@ public class AthleteController {
 	private AthleteRepository athleteRepository;
 
 	@RequestMapping("/athletes")
-	public List<Athlete> getAllReport() {
+	public List<Athlete> getAllAthletes() {
 		return athleteRepository.findAll();
 	}
 
 	@PostMapping("/athletes")
-	public Athlete createReport(@RequestBody Athlete athlete) {
+	public Athlete createAthletes(@RequestBody Athlete athlete) {
 		return athleteRepository.save(athlete);
 	}
 
