@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AthleteRepository extends JpaRepository<Athlete, String> {
     Athlete findByEntryCode(String entryCode);
+    void deleteByEntryCode(String entryCode);
 
 }
 
