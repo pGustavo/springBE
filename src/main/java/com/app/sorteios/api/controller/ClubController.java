@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/clubs")
 public class ClubController {
-
     private final ClubRepository clubRepository;
 
     @Autowired
@@ -21,46 +20,42 @@ public class ClubController {
         this.clubRepository = clubRepository;
     }
 
+    // Endpoint to get all clubs
     @GetMapping
-    public ResponseEntity<List<Club>> getAllClubs() {
-        List<Club> clubs = clubRepository.findAll();
-        return new ResponseEntity<>(clubs, HttpStatus.OK);
+    public List<Club> getAllClubs() {
+        return clubRepository.findAll();
     }
 
+    // Endpoint to get a club by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Club> getClubById(@PathVariable("id") int id) {
-        Club club = clubRepository.findById(id).orElse(null);
-        if (club == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(club, HttpStatus.OK);
+    public Club getClubById(@PathVariable Long id) {
+        return clubRepository.findById(id).orElse(null);
     }
 
+    // Endpoint to create a new club
     @PostMapping
-    public ResponseEntity<Club> createClub(@RequestBody Club club) {
-        Club createdClub = clubRepository.save(club);
-        return new ResponseEntity<>(createdClub, HttpStatus.CREATED);
+    public Club createClub(@RequestBody Club club) {
+        return clubRepository.save(club);
     }
 
+    // Endpoint to update a club
     @PutMapping("/{id}")
-    public ResponseEntity<Club> updateClub(
-            @PathVariable("id") int id, @RequestBody Club club) {
-        Club existingClub = clubRepository.findById(id).orElse(null);
-        if (existingClub == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public Club updateClub(@PathVariable Long id, @RequestBody Club clubData) {
+        Club club = clubRepository.findById(id).orElse(null);
+        if (club != null) {
+            // Update the club data
+            club.setEmailAddress(clubData.getEmailAddress());
+            club.setClubName(clubData.getClubName());
+            club.setClubCountry(clubData.getClubCountry());
+            club.setClubCountryCode(clubData.getClubCountryCode());
+            return clubRepository.save(club);
         }
-        club.setClubCode(existingClub.getClubCode());
-        Club updatedClub = clubRepository.save(club);
-        return new ResponseEntity<>(updatedClub, HttpStatus.OK);
+        return null;
     }
 
+    // Endpoint to delete a club
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteClub(@PathVariable("id") int id) {
-        Club club = clubRepository.findById(id).orElse(null);
-        if (club == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        clubRepository.delete(club);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public void deleteClub(@PathVariable Long id) {
+        clubRepository.deleteById(id);
     }
 }

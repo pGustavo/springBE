@@ -1,18 +1,16 @@
-package com.app.sorteios.api.model;
+package com.app.sorteios.api.dto;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "Athletes")
-public class Athlete {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Athlete DTO class
+ */
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class AthleteDTO {
     private String entryCode;
     private String firstName;
     private String lastName;
@@ -20,34 +18,44 @@ public class Athlete {
     private String gender;
     private String nationality;
     private String login;
-    private String treePositions;
     private String password;
     private String email;
-
-    @Lob
     private byte[] photo;
-
-
+    private String treePosition;
     private String graduation;
     private String weightCategory;
     private String groupCategory;
     private String categoryType;
+    private Long clubId;
+    private Long coachId;
 
+    // Constructors, getters, and setters
 
-
-
-    @ManyToOne
-    @JoinColumn(name = "clubId")
-    private Club club;
-
-    @ManyToOne
-    @JoinColumn(name = "coachId")
-    private Coach coach;
-
-    public Athlete() {
+    public AthleteDTO() {
     }
 
-    // Getters and Setters
+    public AthleteDTO(String entryCode, String firstName, String lastName, Date birthdate, String gender,
+                      String nationality, String login, String password, String email, byte[] photo,
+                      String treePosition, String graduation, String weightCategory, String groupCategory,
+                      String categoryType, Long clubId, Long coachId) {
+        this.entryCode = entryCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.nationality = nationality;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.photo = photo;
+        this.treePosition = treePosition;
+        this.graduation = graduation;
+        this.weightCategory = weightCategory;
+        this.groupCategory = groupCategory;
+        this.categoryType = categoryType;
+        this.clubId = clubId;
+        this.coachId = coachId;
+    }
 
     public String getEntryCode() {
         return entryCode;
@@ -67,10 +75,6 @@ public class Athlete {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public void setTreePositions(String treePositions) {
-        this.treePositions = treePositions;
     }
 
     public void setLastName(String lastName) {
@@ -133,6 +137,13 @@ public class Athlete {
         this.photo = photo;
     }
 
+    public String getTreePosition() {
+        return treePosition;
+    }
+
+    public void setTreePosition(String treePosition) {
+        this.treePosition = treePosition;
+    }
 
     public String getGraduation() {
         return graduation;
@@ -166,27 +177,21 @@ public class Athlete {
         this.categoryType = categoryType;
     }
 
-    public Club getClub() {
-        return club;
+    public Long getClubId() {
+        return clubId;
     }
 
-    public void setClub(Club club) {
-        this.club = club;
+    public void setClubId(Long clubId) {
+        this.clubId = clubId;
     }
 
-    public Coach getCoach() {
-        return coach;
+    public Long getCoachId() {
+        return coachId;
     }
 
-    public void setCoach(Coach coach) {
-        this.coach = coach;
+    public void setCoachId(Long coachId) {
+        this.coachId = coachId;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+	
+	
 }

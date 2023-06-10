@@ -1,62 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.app.sorteios.api.model;
 
-import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-/**
- *
- * @author paulocamargo
- */
+import javax.persistence.*;
+
 @Entity
-@Table(name = "Club", catalog = "sorteios_db", schema = "")
-@NamedQueries({
-    @NamedQuery(name = "Club.findAll", query = "SELECT c FROM Club c"),
-    @NamedQuery(name = "Club.findByClubCode", query = "SELECT c FROM Club c WHERE c.clubCode = :clubCode"),
-    @NamedQuery(name = "Club.findByEmailAddress", query = "SELECT c FROM Club c WHERE c.emailAddress = :emailAddress"),
-    @NamedQuery(name = "Club.findByClubName", query = "SELECT c FROM Club c WHERE c.clubName = :clubName")})
-public class Club implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "Clubs")
+public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "club_code")
-    private Integer clubCode;
-    @Column(name = "email_address")
+    private Long id;
+
     private String emailAddress;
-    @Column(name = "club_name")
     private String clubName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "club")
-    private Collection<Person> personCollection;
+    private String clubCountry;
+    private String clubCountryCode;
 
     public Club() {
     }
 
-    public Club(Integer clubCode) {
-        this.clubCode = clubCode;
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
     }
 
-    public Integer getClubCode() {
-        return clubCode;
-    }
-
-    public void setClubCode(Integer clubCode) {
-        this.clubCode = clubCode;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmailAddress() {
@@ -75,37 +45,19 @@ public class Club implements Serializable {
         this.clubName = clubName;
     }
 
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public String getClubCountry() {
+        return clubCountry;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setClubCountry(String clubCountry) {
+        this.clubCountry = clubCountry;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (clubCode != null ? clubCode.hashCode() : 0);
-        return hash;
+    public String getClubCountryCode() {
+        return clubCountryCode;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Club)) {
-            return false;
-        }
-        Club other = (Club) object;
-        if ((this.clubCode == null && other.clubCode != null) || (this.clubCode != null && !this.clubCode.equals(other.clubCode))) {
-            return false;
-        }
-        return true;
+    public void setClubCountryCode(String clubCountryCode) {
+        this.clubCountryCode = clubCountryCode;
     }
-
-    @Override
-    public String toString() {
-        return "com.mycompany.appteste.Club[ clubCode=" + clubCode + " ]";
-    }
-    
 }

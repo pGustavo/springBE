@@ -1,11 +1,15 @@
 package com.app.sorteios.api.controller;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import com.app.sorteios.api.dto.AthleteDTO;
+import com.app.sorteios.api.model.Athlete;
+import com.app.sorteios.api.model.Club;
+import com.app.sorteios.api.model.Coach;
+import com.app.sorteios.api.repository.ClubRepository;
+import com.app.sorteios.api.repository.CoachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.sorteios.api.exeption.ResourceNotFoundException;
-import com.app.sorteios.api.model.Athlete;
 import com.app.sorteios.api.repository.AthleteRepository;
 
 
@@ -25,49 +27,138 @@ import com.app.sorteios.api.repository.AthleteRepository;
 @RestController
 @RequestMapping("/athletes")
 public class AthleteController {
-	
+	private final AthleteRepository athleteRepository;
+	private final ClubRepository clubRepository;
+	private final CoachRepository coachRepository;
 
 	@Autowired
-	private AthleteRepository athleteRepository;
+	public AthleteController(AthleteRepository athleteRepository, ClubRepository clubRepository, CoachRepository coachRepository) {
+		this.athleteRepository = athleteRepository;
+		this.clubRepository = clubRepository;
+		this.coachRepository = coachRepository;
+	}
 
+	// Endpoint to get all athletes
 	@GetMapping
 	public List<Athlete> getAllAthletes() {
 		return athleteRepository.findAll();
 	}
 
+	// Endpoint to get an athlete by entryCode
+	@GetMapping("/{entryCode}")
+	public Athlete getAthleteByEntryCode(@PathVariable String entryCode) {
+		return athleteRepository.findById(entryCode).orElse(null);
+	}
+
+	// Endpoint to create a new athlete
 	@PostMapping
-	public Athlete createAthletes(@RequestBody Athlete athlete) {
-		return athleteRepository.save(athlete);
+	public Athlete createAthlete(@RequestBody AthleteDTO athleteDTO) {
+
+		Athlete athlete = new Athlete();
+		athlete.setEntryCode(athleteDTO.getEntryCode());
+		athlete.setFirstName(athleteDTO.getFirstName());
+		athlete.setLastName(athleteDTO.getLastName());
+		athlete.setBirthdate(athleteDTO.getBirthdate());
+		athlete.setGender(athleteDTO.getGender());
+		athlete.setNationality(athleteDTO.getNationality());
+		athlete.setLogin(athleteDTO.getLogin());
+		athlete.setPassword(athleteDTO.getPassword());
+		athlete.setEmail(athleteDTO.getEmail());
+		athlete.setPhoto(athleteDTO.getPhoto());
+		athlete.setTreePositions(athleteDTO.getTreePosition());
+		athlete.setGraduation(athleteDTO.getGraduation());
+		athlete.setWeightCategory(athleteDTO.getWeightCategory());
+		athlete.setGroupCategory(athleteDTO.getGroupCategory());
+		athlete.setCategoryType(athleteDTO.getCategoryType());
+		Club club = clubRepository.findById(athleteDTO.getClubId()).orElse(null);
+		if (club != null){
+			athlete.setClub(club);
+		}
+		Coach coach  = coachRepository.findById(athleteDTO.getCoachId()).orElse(null);
+		if (coach != null){
+			athlete.setCoach(coach);
+		}
+		// Save the athlete using the repository
+		athlete = athleteRepository.save(athlete);
+
+		return athlete;
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Athlete> getAthletesById(@PathVariable Integer id) {
-		Athlete athlete = athleteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
-		
-		return ResponseEntity.ok(athlete);
+	@PostMapping("/batch")
+	public List<Athlete> createAthletes(@RequestBody List<AthleteDTO> athleteDTOList) {
+		List<Athlete> athletes = new ArrayList<>();
+		for (AthleteDTO athleteDTO : athleteDTOList) {
+			Athlete athlete = new Athlete();
+			athlete.setEntryCode(athleteDTO.getEntryCode());
+			athlete.setFirstName(athleteDTO.getFirstName());
+			athlete.setLastName(athleteDTO.getLastName());
+			athlete.setBirthdate(athleteDTO.getBirthdate());
+			athlete.setGender(athleteDTO.getGender());
+			athlete.setNationality(athleteDTO.getNationality());
+			athlete.setLogin(athleteDTO.getLogin());
+			athlete.setPassword(athleteDTO.getPassword());
+			athlete.setEmail(athleteDTO.getEmail());
+			athlete.setPhoto(athleteDTO.getPhoto());
+			athlete.setGraduation(athleteDTO.getGraduation());
+			athlete.setWeightCategory(athleteDTO.getWeightCategory());
+			athlete.setGroupCategory(athleteDTO.getGroupCategory());
+			athlete.setCategoryType(athleteDTO.getCategoryType());
+
+			Club club = clubRepository.findById(athleteDTO.getClubId()).orElse(null);
+			if (club != null){
+				athlete.setClub(club);
+			}
+
+			Coach coach  = coachRepository.findById(athleteDTO.getCoachId()).orElse(null);
+			if (coach != null){
+				athlete.setCoach(coach);
+			}
+
+			athletes.add(athlete);
+		}
+
+		// Save the athletes using the repository
+		return athleteRepository.saveAll(athletes);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Athlete> updateAthlete(@PathVariable Integer id, @RequestBody Athlete athleteDetails) {
-		Athlete athlete = athleteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
 
-		athlete.setGroupCategory(athleteDetails.getGroupCategory());
-
-		Athlete updatedAthlete = athleteRepository.save(athlete);
-		return ResponseEntity.ok(updatedAthlete);
+	// Endpoint to update an athlete
+	@PutMapping("/{entryCode}")
+	public Athlete updateAthlete(@PathVariable String entryCode, @RequestBody AthleteDTO athleteDTO) {
+		Athlete athlete = athleteRepository.findById(entryCode).orElse(null);
+		if (athlete != null) {
+			// Update the athlete data
+			athlete.setEntryCode(athleteDTO.getEntryCode());
+			athlete.setFirstName(athleteDTO.getFirstName());
+			athlete.setLastName(athleteDTO.getLastName());
+			athlete.setBirthdate(athleteDTO.getBirthdate());
+			athlete.setGender(athleteDTO.getGender());
+			athlete.setNationality(athleteDTO.getNationality());
+			athlete.setLogin(athleteDTO.getLogin());
+			athlete.setPassword(athleteDTO.getPassword());
+			athlete.setEmail(athleteDTO.getEmail());
+			athlete.setPhoto(athleteDTO.getPhoto());
+			athlete.setTreePositions(athleteDTO.getTreePosition());
+			athlete.setGraduation(athleteDTO.getGraduation());
+			athlete.setWeightCategory(athleteDTO.getWeightCategory());
+			athlete.setGroupCategory(athleteDTO.getGroupCategory());
+			athlete.setCategoryType(athleteDTO.getCategoryType());
+			Club club = clubRepository.findById(athleteDTO.getClubId()).orElse(null);
+			if (club != null){
+				athlete.setClub(club);
+			}
+			Coach coach  = coachRepository.findById(athleteDTO.getCoachId()).orElse(null);
+			if (coach != null){
+				athlete.setCoach(coach);
+			}
+			return athleteRepository.save(athlete);
+		}
+		return null;
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteAthlete(@PathVariable Integer id) {
-		Athlete athlete = athleteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
-
-		athleteRepository.delete(athlete);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return ResponseEntity.ok(response);
+	// Endpoint to delete an athlete
+	@DeleteMapping("/{entryCode}")
+	public void deleteAthlete(@PathVariable String entryCode) {
+		athleteRepository.deleteById(entryCode);
 	}
-
 }

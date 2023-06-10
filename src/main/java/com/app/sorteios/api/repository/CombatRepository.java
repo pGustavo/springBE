@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CombatRepository extends JpaRepository<Combat, Integer> {
-    // You can define custom queries or methods here if needed
+public interface CombatRepository extends JpaRepository<Combat, Long> {
 }

@@ -1,18 +1,8 @@
-package com.app.sorteios.api.model;
+package com.app.sorteios.api.dto;
 
-import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.*;
-import java.util.Date;
-
-@Entity
-@Table(name = "Referees")
-public class Referee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class CoachDTO {
     private String firstName;
     private String lastName;
     private Date birthdate;
@@ -21,29 +11,13 @@ public class Referee {
     private String login;
     private String password;
     private String email;
-
-    @Lob
     private byte[] photo;
+    private String trainerDegree;
+    private Long clubId;
 
-    private Date lastRecycle;
-    private String refereeType;
-    private boolean isInternational;
-
-    @Lob
-    private byte[] proof;
-
-    public Referee() {
+    public CoachDTO() {
     }
 
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -117,36 +91,23 @@ public class Referee {
         this.photo = photo;
     }
 
-    public Date getLastRecycle() {
-        return lastRecycle;
+    public String getTrainerDegree() {
+        return trainerDegree;
     }
 
-    public void setLastRecycle(Date lastRecycle) {
-        this.lastRecycle = lastRecycle;
+    public void setTrainerDegree(String trainerDegree) {
+        this.trainerDegree = trainerDegree;
     }
 
-    public String getRefereeType() {
-        return refereeType;
+    public Long getClubId() {
+        return clubId;
     }
 
-    public void setRefereeType(String refereeType) {
-        this.refereeType = refereeType;
+    public void setClubId(Long clubId) {
+        this.clubId = clubId;
     }
 
-    public boolean isInternational() {
-        return isInternational;
-    }
-
-    public void setInternational(boolean international) {
-        isInternational = international;
-    }
-
-    public byte[] getProof() {
-        return proof;
-    }
-
-    public void setProof(byte[] proof) {
-        this.proof = proof;
-    }
+    // Constructors, getters, and setters
+    // ...
 }
 

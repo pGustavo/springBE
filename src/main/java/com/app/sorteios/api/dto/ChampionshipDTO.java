@@ -1,35 +1,16 @@
-package com.app.sorteios.api.model;
+package com.app.sorteios.api.dto;
 
-import javax.persistence.*;
-import java.util.Date;
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "Championships")
-public class Championship {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ChampionshipDTO {
     private String name;
     private String location;
     private Date time;
-
-    @Lob
     private byte[] logo;
 
-    public Championship() {
-    }
+    // Constructors, getters, and setters
 
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ChampionshipDTO() {
     }
 
     public String getName() {

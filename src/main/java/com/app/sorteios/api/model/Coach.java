@@ -1,100 +1,130 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.app.sorteios.api.model;
+import javax.persistence.*;
+import java.util.Date;
 
-import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-/**
- *
- * @author paulocamargo
- */
 @Entity
-@Table(name = "Coach", catalog = "sorteios_db", schema = "")
-@NamedQueries({
-    @NamedQuery(name = "Coach.findAll", query = "SELECT c FROM Coach c"),
-    @NamedQuery(name = "Coach.findByCoachCode", query = "SELECT c FROM Coach c WHERE c.coachCode = :coachCode"),
-    @NamedQuery(name = "Coach.findByTrainnerDegree", query = "SELECT c FROM Coach c WHERE c.trainnerDegree = :trainnerDegree")})
-public class Coach implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "Coaches")
+public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "coach_code")
-    private Integer coachCode;
-    @Column(name = "trainnerDegree")
-    private String trainnerDegree;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "coach")
-    private Collection<Person> personCollection;
+    private Long id;
+
+    private String firstName;
+    private String lastName;
+    private Date birthdate;
+    private String gender;
+    private String nationality;
+    private String login;
+    private String password;
+    private String email;
+
+    @Lob
+    private byte[] photo;
+
+    private String trainerDegree;
+
+    @ManyToOne
+    @JoinColumn(name = "clubId")
+    private Club club;
 
     public Coach() {
     }
 
-    public Coach(Integer coachCode) {
-        this.coachCode = coachCode;
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
     }
 
-    public Integer getCoachCode() {
-        return coachCode;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCoachCode(Integer coachCode) {
-        this.coachCode = coachCode;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getTrainnerDegree() {
-        return trainnerDegree;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setTrainnerDegree(String trainnerDegree) {
-        this.trainnerDegree = trainnerDegree;
+    public String getLastName() {
+        return lastName;
     }
 
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public Date getBirthdate() {
+        return birthdate;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (coachCode != null ? coachCode.hashCode() : 0);
-        return hash;
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Coach)) {
-            return false;
-        }
-        Coach other = (Coach) object;
-        if ((this.coachCode == null && other.coachCode != null) || (this.coachCode != null && !this.coachCode.equals(other.coachCode))) {
-            return false;
-        }
-        return true;
+    public String getGender() {
+        return gender;
     }
 
-    @Override
-    public String toString() {
-        return "com.mycompany.appteste.Coach[ coachCode=" + coachCode + " ]";
+    public void setGender(String gender) {
+        this.gender = gender;
     }
-    
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getTrainerDegree() {
+        return trainerDegree;
+    }
+
+    public void setTrainerDegree(String trainerDegree) {
+        this.trainerDegree = trainerDegree;
+    }
+
+    public Club getClub() {
+        return club;
+    }
+
+    public void setClub(Club club) {
+        this.club = club;
+    }
 }
