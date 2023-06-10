@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.app.sorteios.api.model.Athlete;
 
 @Repository
-public interface AthleteRepository extends JpaRepository<Athlete, Long>{
+public interface AthleteRepository extends JpaRepository<Athlete, Integer>{
 	
 	List<Athlete> findAthleteByGroupCategoryIgnoreCaseContaining(String groupCategory);
 

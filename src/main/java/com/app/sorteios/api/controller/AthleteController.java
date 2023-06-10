@@ -30,7 +30,7 @@ public class AthleteController {
 	@Autowired
 	private AthleteRepository athleteRepository;
 
-	@RequestMapping("/athletes")
+	@GetMapping("/athletes")
 	public List<Athlete> getAllAthletes() {
 		return athleteRepository.findAll();
 	}
@@ -41,7 +41,7 @@ public class AthleteController {
 	}
 
 	@GetMapping("/athletes/{id}")
-	public ResponseEntity<Athlete> getAthletesById(@PathVariable Long id) {
+	public ResponseEntity<Athlete> getAthletesById(@PathVariable Integer id) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
 		
@@ -49,7 +49,7 @@ public class AthleteController {
 	}
 
 	@PutMapping("/athletes/{id}")
-	public ResponseEntity<Athlete> updateAthlete(@PathVariable Long id, @RequestBody Athlete athleteDetails) {
+	public ResponseEntity<Athlete> updateAthlete(@PathVariable Integer id, @RequestBody Athlete athleteDetails) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
 
@@ -60,7 +60,7 @@ public class AthleteController {
 	}
 
 	@DeleteMapping("/athletes/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteAthlete(@PathVariable Long id) {
+	public ResponseEntity<Map<String, Boolean>> deleteAthlete(@PathVariable Integer id) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
 
