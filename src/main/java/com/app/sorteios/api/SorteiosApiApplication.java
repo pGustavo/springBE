@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @SpringBootApplication
 public class SorteiosApiApplication {
 	// to build
-	// C:\Users\gusta\WebstormProjects\app.sorteios>.\mvnw clean install
+	// cd C:\Users\gusta\WebstormProjects\app.sorteios
+	// .\mvnw clean install
 
 	@CrossOrigin
 	public static void main(String[] args) {

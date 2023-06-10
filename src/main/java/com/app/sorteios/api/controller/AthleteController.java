@@ -23,24 +23,24 @@ import com.app.sorteios.api.repository.AthleteRepository;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/athletes")
 public class AthleteController {
 	
 
 	@Autowired
 	private AthleteRepository athleteRepository;
 
-	@GetMapping("/athletes")
+	@GetMapping
 	public List<Athlete> getAllAthletes() {
 		return athleteRepository.findAll();
 	}
 
-	@PostMapping("/athletes")
+	@PostMapping
 	public Athlete createAthletes(@RequestBody Athlete athlete) {
 		return athleteRepository.save(athlete);
 	}
 
-	@GetMapping("/athletes/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Athlete> getAthletesById(@PathVariable Integer id) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
@@ -48,7 +48,7 @@ public class AthleteController {
 		return ResponseEntity.ok(athlete);
 	}
 
-	@PutMapping("/athletes/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Athlete> updateAthlete(@PathVariable Integer id, @RequestBody Athlete athleteDetails) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
@@ -59,7 +59,7 @@ public class AthleteController {
 		return ResponseEntity.ok(updatedAthlete);
 	}
 
-	@DeleteMapping("/athletes/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteAthlete(@PathVariable Integer id) {
 		Athlete athlete = athleteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Athlete not exist with id :" + id));
